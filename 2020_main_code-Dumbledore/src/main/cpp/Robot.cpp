@@ -84,6 +84,8 @@ void Robot::AutonomousInit() {
 void Robot::AutonomousPeriodic() {
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
+
+
   } else {
     // Default Auto goes here
     shooterActualSpeed = shoot1->GetSelectedSensorVelocity();
@@ -108,6 +110,27 @@ void Robot::AutonomousPeriodic() {
   }
 }
 
+void Robot::AutoNav1()
+{
+
+  //drive stright towards first target
+  rotationsLeftMotors += 20;
+  rotationsRightMotors += 20;
+  // after pass target start to turn right
+  rotationsLeftMotors += 30;
+  rotationsRightMotors += 20;
+
+
+  frontLeftEncoder1.SetPosition(rotationsLeftMotors);
+  frontRightEncoder1.SetPosition(rotationsRightMotors);
+  rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
+  rearRightEncoder1.SetPosition(rotationsRightMotors); 
+  frontLeftEncoder2.SetPosition(rotationsLeftMotors); 
+  frontRightEncoder2.SetPosition(rotationsRightMotors); 
+  rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
+  rearRightEncoder2.SetPosition(rotationsRightMotors); 
+}
+
 void Robot::TeleopInit() {
  
 }
@@ -124,10 +147,10 @@ void Robot::TeleopPeriodic() {
   //Testing();
 
   frc::SmartDashboard::PutBoolean("ballIn", ballSwitch.Get());
-  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder.GetVelocity());
-  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder.GetVelocity());
+  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetVelocity());
   frc::SmartDashboard::PutNumber("climber", climbEnc.GetPosition());
 
 

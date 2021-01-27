@@ -49,6 +49,11 @@ class Robot : public frc::TimedRobot {
   void LED();
   void Testing();
 
+  // Auto scripts setup
+
+  void AutoNav1();
+  double rotationsLeftMotors;
+  double rotationsRightMotors;
   // Input
 
   frc::Joystick JLeft{0};
@@ -87,13 +92,19 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax rearRightMotor2{8, rev::CANSparkMax::MotorType::kBrushless};
 
 
-  rev::CANEncoder frontLeftEncoder = frontLeftMotor1.GetEncoder();
-  rev::CANEncoder frontRightEncoder = frontRightMotor1.GetEncoder();
-  rev::CANEncoder rearLeftEncoder = rearLeftMotor1.GetEncoder();
-  rev::CANEncoder rearRightEncoder = rearRightMotor1.GetEncoder();
+  rev::CANEncoder frontLeftEncoder1 = frontLeftMotor1.GetEncoder();
+  rev::CANEncoder frontRightEncoder1 = frontRightMotor1.GetEncoder();
+  rev::CANEncoder rearLeftEncoder1 = rearLeftMotor1.GetEncoder();
+  rev::CANEncoder rearRightEncoder1 = rearRightMotor1.GetEncoder();
+  rev::CANEncoder frontLeftEncoder2 = frontLeftMotor2.GetEncoder();
+  rev::CANEncoder frontRightEncoder2 = frontRightMotor2.GetEncoder();
+  rev::CANEncoder rearLeftEncoder2 = rearLeftMotor2.GetEncoder();
+  rev::CANEncoder rearRightEncoder2 = rearRightMotor2.GetEncoder();
+
 
   frc::SpeedControllerGroup m_left{frontLeftMotor1, frontLeftMotor2, rearLeftMotor1, rearLeftMotor2};
   frc::SpeedControllerGroup m_right{frontRightMotor1, frontRightMotor2, rearRightMotor1, rearRightMotor2};
+  
   
 
 // Aiming------------------
