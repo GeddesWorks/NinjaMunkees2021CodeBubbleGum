@@ -18,7 +18,7 @@ void Robot::RobotInit() {
   shoot1->ConfigPeakOutputForward(1);
   shoot1->ConfigPeakOutputReverse(-1);
   shoot1->Config_kF(kPIDLoopIdx, 0.1097, kTimeoutMs);
-  shoot1->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
+  shoot1->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
   shoot1->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
   shoot1->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
   shoot1->SetSensorPhase(false);
@@ -28,7 +28,7 @@ void Robot::RobotInit() {
   shoot2->ConfigPeakOutputForward(1);
   shoot2->ConfigPeakOutputReverse(-1);
   shoot2->Config_kF(kPIDLoopIdx, 0.1097, kTimeoutMs);
-  shoot2->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
+  shoot2->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
   shoot2->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
   shoot2->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
   shoot2->SetSensorPhase(false);
@@ -45,6 +45,7 @@ void Robot::RobotInit() {
 
   T1.Start();
   T2.Start();
+
 }
 
 /**
@@ -88,7 +89,7 @@ void Robot::AutonomousPeriodic() {
 
   } else {
     // Default Auto goes here
-    shooterActualSpeed = shoot1->GetSelectedSensorVelocity();
+    /*shooterActualSpeed = shoot1->GetSelectedSensorVelocity();
     shooterTargetSpeed = 4500; //Replace this with real number
 
     shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
@@ -106,7 +107,21 @@ void Robot::AutonomousPeriodic() {
     else{
       index->Set(ControlMode::Velocity, 0);
     }
+    */
+    //AutoNav1();
     
+    
+    rotationsLeftMotors += 800;
+  rotationsRightMotors += 800;
+    frontLeftEncoder1.SetPosition(rotationsLeftMotors);
+    frontRightEncoder1.SetPosition(rotationsRightMotors);
+    rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
+    rearRightEncoder1.SetPosition(rotationsRightMotors); 
+    frontLeftEncoder2.SetPosition(rotationsLeftMotors); 
+    frontRightEncoder2.SetPosition(rotationsRightMotors); 
+    rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
+    rearRightEncoder2.SetPosition(rotationsRightMotors);
+  
   }
 }
 
@@ -116,11 +131,46 @@ void Robot::AutoNav1()
   //drive stright towards first target
   rotationsLeftMotors += 20;
   rotationsRightMotors += 20;
-  // after pass target start to turn right
-  rotationsLeftMotors += 30;
+  frc::Wait(.5);
+  
+  // after pass target start to turn right and loop
+  rotationsLeftMotors += 60;
+  rotationsRightMotors += 10;
+  frc::Wait(.5);
+
+  // drive towards second target
+  rotationsLeftMotors += 20;
   rotationsRightMotors += 20;
+  frc::Wait(.5);
 
+  // drive left around target
+  rotationsLeftMotors += 10;
+  rotationsRightMotors += 60;
+  frc::Wait(.5);
 
+  //drive towards last target
+  rotationsLeftMotors += 20;
+  rotationsRightMotors += 20;
+  frc::Wait(.5);
+
+  // drive left around target but not fully
+  rotationsLeftMotors += 10;
+  rotationsRightMotors += 30;
+  frc::Wait(.5);
+
+  // drive tpowards end 
+  rotationsLeftMotors += 70;
+  rotationsRightMotors += 70;
+  frc::Wait(.5);
+  
+  // done
+
+  // drive motors
+   
+}
+
+void Robot::AutoNav2(){
+  //drive forwards and to the left
   frontLeftEncoder1.SetPosition(rotationsLeftMotors);
   frontRightEncoder1.SetPosition(rotationsRightMotors);
   rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
@@ -130,14 +180,13 @@ void Robot::AutoNav1()
   rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
   rearRightEncoder2.SetPosition(rotationsRightMotors); 
 }
-
 void Robot::TeleopInit() {
  
 }
 
 void Robot::TeleopPeriodic() {
 
-  ColorPizza();
+  //ColorPizza();
   Drive();
   Shooter();
   Intake();
@@ -302,7 +351,7 @@ void Robot::TeleopPeriodic() {
     }
     frc::SmartDashboard::PutString("Detected color", colorString);
     frc::SmartDashboard::PutString("Target color", gameData);
-    frc::SmartDashboard::PutNumber("time", T1.Get());
+    //frc::SmartDashboard::PutNumber("time", T1.Get());
     /*if(T1.Get() == .15){
       T1.Reset();
       
@@ -460,9 +509,11 @@ void Robot::TeleopPeriodic() {
     frc::SmartDashboard::PutNumber("Shooter Actual Speed", shooterActualSpeed);
     //frc::SmartDashboard::PutNumber("Shooter Actual Speed2", shooterActualSpeed);
 
-    shooterTargetSpeed = 4000; //distanceFromTarget; // * some number;
+    shooterTargetSpeed = 8000; //distanceFromTarget; // * some number;
 
     if(buttonBoard.GetRawButton(11)){
+      shoot2->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
+      shoot1->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
       shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
       shoot2->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
       ballUp->Set(ControlMode::PercentOutput, 1); 
@@ -474,7 +525,8 @@ void Robot::TeleopPeriodic() {
       }
     }
     else{
-
+      shoot2->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
+      shoot1->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
       shoot1->Set(ControlMode::Velocity, 0); 
       shoot2->Set(ControlMode::Velocity, 0); 
       ballUp->Set(ControlMode::PercentOutput, 0);
@@ -519,7 +571,7 @@ void Robot::TeleopPeriodic() {
 
   void Robot::Index(){
     if (buttonBoard.GetRawButton(11) && shooterIsRunning == true){
-      index->Set(ControlMode::PercentOutput, -.5); 
+      index->Set(ControlMode::PercentOutput, -.3f); 
       //ballUp->Set(ControlMode::PercentOutput, 1);
     }
     else if(buttonBoard.GetRawButton(4) && indexShift == false){
@@ -535,12 +587,17 @@ void Robot::TeleopPeriodic() {
       //ballUp->Set(ControlMode::PercentOutput, 0); 
     }
 
-    if (indexShift == true && T2.Get() <= .57){
-      index->Set(ControlMode::PercentOutput, -.5); 
+    
+    if (indexShift == true) {
+      
+      if(indexClick.Get() && T2.Get() > .3){
+        indexShift = false;
+      }
+      else{
+        index->Set(ControlMode::PercentOutput, -.5); 
+      }
     }
-    else{
-      indexShift = false;
-    }
+    
 
     
   }

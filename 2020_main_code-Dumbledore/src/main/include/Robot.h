@@ -27,6 +27,7 @@
 #include "rev/CANSparkMax.h"
 #include "ctre/Phoenix.h"
 #include <frc/timer.h>
+#include <frc2/timer.h>
 
 
 class Robot : public frc::TimedRobot {
@@ -52,6 +53,7 @@ class Robot : public frc::TimedRobot {
   // Auto scripts setup
 
   void AutoNav1();
+  void AutoNav2();
   double rotationsLeftMotors;
   double rotationsRightMotors;
   // Input
@@ -180,6 +182,11 @@ class Robot : public frc::TimedRobot {
   bool button2Pressed = false;
   bool is2Run = false;
   bool IndexRun = false;
+
+  bool buttonHit;
+
+  frc::DigitalInput indexClick{0};
+
 
 // LED Set-up
   frc::Spark LEDcontrol{0};
