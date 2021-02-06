@@ -34,12 +34,13 @@ void Robot::RobotInit() {
   shoot2->SetSensorPhase(false);
   shoot2->SetInverted(false);
 
-  climbPID.SetP(kPe);
-  climbPID.SetI(kI);
-  climbPID.SetD(kD);
-  climbPID.SetIZone(kIz);
-  climbPID.SetFF(kFF);
+  climbPID.SetP(CkPe);
+  climbPID.SetI(CkI);
+  climbPID.SetD(CkD);
+  climbPID.SetIZone(CkIz);
+  climbPID.SetFF(CkFF);
   climbPID.SetOutputRange(kMinOutput, kMaxOutput);
+  
 
   index->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
 
@@ -56,7 +57,13 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetPosition());
+  
+}
 
 /**
  * This autonomous (along with the chooser code above) shows how to select
@@ -79,6 +86,111 @@ void Robot::AutonomousInit() {
     // Custom Auto goes here
   } else {
     // Default Auto goes here
+
+      kPe = frc::SmartDashboard::GetNumber("DB/Slider 0", 0);
+      kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
+      kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
+      kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
+      
+      frontLeftPID1.SetP(kPe);
+      frontLeftPID1.SetI(kI);
+      frontLeftPID1.SetD(kD);
+      frontLeftPID1.SetIZone(kIz);
+      frontLeftPID1.SetFF(kFF);
+      frontLeftPID1.SetOutputRange(kMinOutput, kMaxOutput);
+      frontLeftPID1.SetSmartMotionMaxVelocity(kMaxVel);
+      frontLeftPID1.SetSmartMotionMinOutputVelocity(kMinVel);
+      frontLeftPID1.SetSmartMotionMaxAccel(kMaxAcc);
+      frontLeftPID1.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      frontLeftPID2.SetP(kPe);
+      frontLeftPID2.SetI(kI);
+      frontLeftPID2.SetD(kD);
+      frontLeftPID2.SetIZone(kIz);
+      frontLeftPID2.SetFF(kFF);
+      frontLeftPID2.SetOutputRange(kMinOutput, kMaxOutput);
+      frontLeftPID2.SetSmartMotionMaxVelocity(kMaxVel);
+      frontLeftPID2.SetSmartMotionMinOutputVelocity(kMinVel);
+      frontLeftPID2.SetSmartMotionMaxAccel(kMaxAcc);
+      frontLeftPID2.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      frontRightPID1.SetP(kPe);
+      frontRightPID1.SetI(kI);
+      frontRightPID1.SetD(kD);
+      frontRightPID1.SetIZone(kIz);
+      frontRightPID1.SetFF(kFF);
+      frontRightPID1.SetOutputRange(kMinOutput, kMaxOutput);
+      frontRightPID1.SetSmartMotionMaxVelocity(kMaxVel);
+      frontRightPID1.SetSmartMotionMinOutputVelocity(kMinVel);
+      frontRightPID1.SetSmartMotionMaxAccel(kMaxAcc);
+      frontRightPID1.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      frontRightPID2.SetP(kPe);
+      frontRightPID2.SetI(kI);
+      frontRightPID2.SetD(kD);
+      frontRightPID2.SetIZone(kIz);
+      frontRightPID2.SetFF(kFF);
+      frontRightPID2.SetOutputRange(kMinOutput, kMaxOutput);
+      frontRightPID2.SetSmartMotionMaxVelocity(kMaxVel);
+      frontRightPID2.SetSmartMotionMinOutputVelocity(kMinVel);
+      frontRightPID2.SetSmartMotionMaxAccel(kMaxAcc);
+      frontRightPID2.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+
+      rearLeftPID1.SetP(kPe);
+      rearLeftPID1.SetI(kI);
+      rearLeftPID1.SetD(kD);
+      rearLeftPID1.SetIZone(kIz);
+      rearLeftPID1.SetFF(kFF);
+      rearLeftPID1.SetOutputRange(kMinOutput, kMaxOutput);
+      rearLeftPID1.SetSmartMotionMaxVelocity(kMaxVel);
+      rearLeftPID1.SetSmartMotionMinOutputVelocity(kMinVel);
+      rearLeftPID1.SetSmartMotionMaxAccel(kMaxAcc);
+      rearLeftPID1.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      rearLeftPID2.SetP(kPe);
+      rearLeftPID2.SetI(kI);
+      rearLeftPID2.SetD(kD);
+      rearLeftPID2.SetIZone(kIz);
+      rearLeftPID2.SetFF(kFF);
+      rearLeftPID2.SetOutputRange(kMinOutput, kMaxOutput);
+      rearLeftPID2.SetSmartMotionMaxVelocity(kMaxVel);
+      rearLeftPID2.SetSmartMotionMinOutputVelocity(kMinVel);
+      rearLeftPID2.SetSmartMotionMaxAccel(kMaxAcc);
+      rearLeftPID2.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      rearRightPID1.SetP(kPe);
+      rearRightPID1.SetI(kI);
+      rearRightPID1.SetD(kD);
+      rearRightPID1.SetIZone(kIz);
+      rearRightPID1.SetFF(kFF);
+      rearRightPID1.SetOutputRange(kMinOutput, kMaxOutput);
+      rearRightPID1.SetSmartMotionMaxVelocity(kMaxVel);
+      rearRightPID1.SetSmartMotionMinOutputVelocity(kMinVel);
+      rearRightPID1.SetSmartMotionMaxAccel(kMaxAcc);
+      rearRightPID1.SetSmartMotionAllowedClosedLoopError(kAllErr);
+      
+      rearRightPID2.SetP(kPe);
+      rearRightPID2.SetI(kI);
+      rearRightPID2.SetD(kD);
+      rearRightPID2.SetIZone(kIz);
+      rearRightPID2.SetFF(kFF);
+      rearRightPID2.SetOutputRange(kMinOutput, kMaxOutput);
+      rearRightPID2.SetSmartMotionMaxVelocity(kMaxVel);
+      rearRightPID2.SetSmartMotionMinOutputVelocity(kMinVel);
+      rearRightPID2.SetSmartMotionMaxAccel(kMaxAcc);
+      rearRightPID2.SetSmartMotionAllowedClosedLoopError(kAllErr);
+
+      frontLeftEncoder1.SetPosition(0);
+      frontLeftEncoder2.SetPosition(0);
+      frontRightEncoder1.SetPosition(0);
+      frontRightEncoder2.SetPosition(0);
+      rearLeftEncoder1.SetPosition(0);
+      rearLeftEncoder2.SetPosition(0);
+      rearRightEncoder1.SetPosition(0);
+      rearRightEncoder2.SetPosition(0);
+
+      
   }
 }
 
@@ -89,39 +201,57 @@ void Robot::AutonomousPeriodic() {
 
   } else {
     // Default Auto goes here
-    /*shooterActualSpeed = shoot1->GetSelectedSensorVelocity();
-    shooterTargetSpeed = 4500; //Replace this with real number
+    
+      rotationsLeftMotors = 80;
+      rotationsRightMotors = -80;
+      frontLeftPID1.SetReference(80, rev::ControlType::kPosition);
+      frontRightPID1.SetReference(-80, rev::ControlType::kPosition);
+      rearLeftPID1.SetReference(80, rev::ControlType::kPosition);
+      rearRightPID1.SetReference(-80, rev::ControlType::kPosition);
+      frontLeftPID2.SetReference(80, rev::ControlType::kPosition);
+      frontRightPID2.SetReference(-80, rev::ControlType::kPosition);
+      rearLeftPID2.SetReference(80, rev::ControlType::kPosition);
+      rearRightPID2.SetReference(-80, rev::ControlType::kPosition);
+      
+      /*
+      if(rearLeftEncoder1.GetPosition() == 80 && rearRightEncoder1.GetPosition() == -80)
+      {
+        rotationsLeftMotors = -80;
+        rotationsRightMotors = 80;
+        frontLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        frontRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        rearLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        rearRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        frontLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        frontRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        rearLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        rearRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+      }
 
-    shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
-    shoot2->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
-    if(shooterActualSpeed < shooterTargetSpeed + shooterdeadzone && shooterActualSpeed > shooterTargetSpeed - shooterdeadzone){
-      shooterIsRunning = true;
-    }
-    else{
-      shooterIsRunning = false;
-    }
-
-    if (shooterIsRunning == true){
-      index->Set(ControlMode::Velocity, -1); 
-    }
-    else{
-      index->Set(ControlMode::Velocity, 0);
-    }
-    */
-    //AutoNav1();
+      else if (rearLeftEncoder1.GetPosition() == 0 && rearRightEncoder1.GetPosition() == 0)
+      {
+        rotationsLeftMotors = 80;
+        rotationsRightMotors = 80;
+        frontLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        frontRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        rearLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        rearRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        frontLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        frontRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+        rearLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
+        rearRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
+      }
+      */
     
     
-    rotationsLeftMotors += 800;
-  rotationsRightMotors += 800;
-    frontLeftEncoder1.SetPosition(rotationsLeftMotors);
-    frontRightEncoder1.SetPosition(rotationsRightMotors);
-    rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
-    rearRightEncoder1.SetPosition(rotationsRightMotors); 
-    frontLeftEncoder2.SetPosition(rotationsLeftMotors); 
-    frontRightEncoder2.SetPosition(rotationsRightMotors); 
-    rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
-    rearRightEncoder2.SetPosition(rotationsRightMotors);
-  
+    
+    
+    
+
+    
+    
+    frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors);
+    frc::SmartDashboard::PutNumber("RightSetVal", rotationsRightMotors);
   }
 }
 
@@ -129,12 +259,18 @@ void Robot::AutoNav1()
 {
 
   //drive stright towards first target
-  rotationsLeftMotors += 20;
-  rotationsRightMotors += 20;
-  frc::Wait(.5);
+  rotationsLeftMotors = 80;
+  rotationsRightMotors = -80;
+  /*if(frontLeftEncoder1.GetPosition() >= 80 && frontRightEncoder1.GetPosition() <= -80){
+    frc::Wait(1);
+    rotationsLeftMotors -= 80;
+    rotationsRightMotors += 80;
+    //frc::Wait(1);
+  }*/
+  
   
   // after pass target start to turn right and loop
-  rotationsLeftMotors += 60;
+  /*rotationsLeftMotors += 60;
   rotationsRightMotors += 10;
   frc::Wait(.5);
 
@@ -157,16 +293,17 @@ void Robot::AutoNav1()
   rotationsLeftMotors += 10;
   rotationsRightMotors += 30;
   frc::Wait(.5);
+  */
 
   // drive tpowards end 
-  rotationsLeftMotors += 70;
-  rotationsRightMotors += 70;
+  //rotationsLeftMotors += 70;
+  //rotationsRightMotors -= 70;
   frc::Wait(.5);
   
   // done
 
   // drive motors
-   
+   runOnce = true;
 }
 
 void Robot::AutoNav2(){
@@ -509,10 +646,11 @@ void Robot::TeleopPeriodic() {
     frc::SmartDashboard::PutNumber("Shooter Actual Speed", shooterActualSpeed);
     //frc::SmartDashboard::PutNumber("Shooter Actual Speed2", shooterActualSpeed);
 
-    shooterTargetSpeed = 8000; //distanceFromTarget; // * some number;
+    //speed = frc::SmartDashboard::GetNumber("DB/Slider 0", 0);
+    shooterTargetSpeed = speed; //distanceFromTarget; // * some number;
 
     if(buttonBoard.GetRawButton(11)){
-      shoot2->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
+      shoot2->Config_kP(kPIDLoopIdx, 0., kTimeoutMs);
       shoot1->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
       shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
       shoot2->Set(ControlMode::Velocity, shooterTargetSpeed * -1);

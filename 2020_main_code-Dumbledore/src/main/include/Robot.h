@@ -56,6 +56,7 @@ class Robot : public frc::TimedRobot {
   void AutoNav2();
   double rotationsLeftMotors;
   double rotationsRightMotors;
+  bool runOnce = false;
   // Input
 
   frc::Joystick JLeft{0};
@@ -93,6 +94,14 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax rearRightMotor1{7, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax rearRightMotor2{8, rev::CANSparkMax::MotorType::kBrushless};
 
+  rev::CANPIDController frontLeftPID1 = frontLeftMotor1.GetPIDController();
+  rev::CANPIDController frontLeftPID2 = frontLeftMotor2.GetPIDController();
+  rev::CANPIDController frontRightPID1 = frontRightMotor1.GetPIDController();
+  rev::CANPIDController frontRightPID2 = frontRightMotor2.GetPIDController();
+  rev::CANPIDController rearLeftPID1 = rearLeftMotor1.GetPIDController();
+  rev::CANPIDController rearLeftPID2 = rearLeftMotor2.GetPIDController();
+  rev::CANPIDController rearRightPID1 = rearRightMotor1.GetPIDController();
+  rev::CANPIDController rearRightPID2 = rearRightMotor2.GetPIDController();
 
   rev::CANEncoder frontLeftEncoder1 = frontLeftMotor1.GetEncoder();
   rev::CANEncoder frontRightEncoder1 = frontRightMotor1.GetEncoder();
@@ -107,7 +116,15 @@ class Robot : public frc::TimedRobot {
   frc::SpeedControllerGroup m_left{frontLeftMotor1, frontLeftMotor2, rearLeftMotor1, rearLeftMotor2};
   frc::SpeedControllerGroup m_right{frontRightMotor1, frontRightMotor2, rearRightMotor1, rearRightMotor2};
   
-  
+  double kMaxVel = 2000, kMinVel = 0, kMaxAcc = 1500, kAllErr = 0;
+  double 
+  kPe = 0.05, 
+  kI = 0, 
+  kD = .001, 
+  kIz = 0.004, 
+  kFF = 0.000156, 
+  kMaxOutput = 1, 
+  kMinOutput = -1;
 
 // Aiming------------------
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
@@ -165,13 +182,13 @@ class Robot : public frc::TimedRobot {
   double posUp = 0;
   double posDown = 0;
 
-  double kPe = 0.2, 
-    kI = 0, 
-    kD = 1, 
-    kIz = 0, 
-    kFF = 0, 
-    kMaxOutput = 1, 
-    kMinOutput = -1;
+  double CkPe = 0.2, 
+    CkI = 0, 
+    CkD = 1, 
+    CkIz = 0, 
+    CkFF = 0, 
+    CkMaxOutput = 1, 
+    CkMinOutput = -1;
 
 // Index-------------------
   TalonSRX * index = new TalonSRX(11);
