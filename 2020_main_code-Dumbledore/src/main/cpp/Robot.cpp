@@ -190,7 +190,7 @@ void Robot::AutonomousInit() {
       rearRightEncoder1.SetPosition(0);
       rearRightEncoder2.SetPosition(0);
 
-      
+      autoCount = 1;
   }
 }
 
@@ -202,16 +202,20 @@ void Robot::AutonomousPeriodic() {
   } else {
     // Default Auto goes here
     
-      rotationsLeftMotors = 80;
-      rotationsRightMotors = -80;
-      frontLeftPID1.SetReference(80, rev::ControlType::kPosition);
-      frontRightPID1.SetReference(-80, rev::ControlType::kPosition);
-      rearLeftPID1.SetReference(80, rev::ControlType::kPosition);
-      rearRightPID1.SetReference(-80, rev::ControlType::kPosition);
-      frontLeftPID2.SetReference(80, rev::ControlType::kPosition);
-      frontRightPID2.SetReference(-80, rev::ControlType::kPosition);
-      rearLeftPID2.SetReference(80, rev::ControlType::kPosition);
-      rearRightPID2.SetReference(-80, rev::ControlType::kPosition);
+      rotationsLeftMotors[0] = 80;
+      rotationsRightMotors[0] = -80;
+      if(rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount] <= rotationsLeftMotors[autoCount] && rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount] <= rotationsRightMotors[autoCount])
+      {
+        frontLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
+        frontRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
+        rearLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
+        rearRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
+        frontLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
+        frontRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
+        rearLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
+        rearRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
+      }
+      
       
       /*
       if(rearLeftEncoder1.GetPosition() == 80 && rearRightEncoder1.GetPosition() == -80)
@@ -250,8 +254,8 @@ void Robot::AutonomousPeriodic() {
 
     
     
-    frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors);
-    frc::SmartDashboard::PutNumber("RightSetVal", rotationsRightMotors);
+    frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors[autoCount]);
+    frc::SmartDashboard::PutNumber("RightSetVal", rotationsRightMotors[autoCount]);
   }
 }
 
@@ -259,8 +263,8 @@ void Robot::AutoNav1()
 {
 
   //drive stright towards first target
-  rotationsLeftMotors = 80;
-  rotationsRightMotors = -80;
+  //rotationsLeftMotors = 80;
+  //rotationsRightMotors = -80;
   /*if(frontLeftEncoder1.GetPosition() >= 80 && frontRightEncoder1.GetPosition() <= -80){
     frc::Wait(1);
     rotationsLeftMotors -= 80;
@@ -308,14 +312,14 @@ void Robot::AutoNav1()
 
 void Robot::AutoNav2(){
   //drive forwards and to the left
-  frontLeftEncoder1.SetPosition(rotationsLeftMotors);
+  /*frontLeftEncoder1.SetPosition(rotationsLeftMotors);
   frontRightEncoder1.SetPosition(rotationsRightMotors);
   rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
   rearRightEncoder1.SetPosition(rotationsRightMotors); 
   frontLeftEncoder2.SetPosition(rotationsLeftMotors); 
   frontRightEncoder2.SetPosition(rotationsRightMotors); 
   rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
-  rearRightEncoder2.SetPosition(rotationsRightMotors); 
+  rearRightEncoder2.SetPosition(rotationsRightMotors); */
 }
 void Robot::TeleopInit() {
  

@@ -54,9 +54,10 @@ class Robot : public frc::TimedRobot {
 
   void AutoNav1();
   void AutoNav2();
-  double rotationsLeftMotors;
-  double rotationsRightMotors;
+  double rotationsLeftMotors[7];
+  double rotationsRightMotors[7];
   bool runOnce = false;
+  int autoCount;
   // Input
 
   frc::Joystick JLeft{0};
