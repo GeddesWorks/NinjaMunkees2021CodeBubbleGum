@@ -54,8 +54,8 @@ class Robot : public frc::TimedRobot {
 
   void AutoNav1();
   void AutoNav2();
-  double rotationsLeftMotors[7];
-  double rotationsRightMotors[7];
+  std::vector<double> rotationsLeftMotors;
+  std::vector<double> rotationsRightMotors;
   bool runOnce = false;
   int autoCount;
   // Input
@@ -69,7 +69,7 @@ class Robot : public frc::TimedRobot {
   frc::DigitalInput ballSwitch{4};
   
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
-  rev::ColorSensorV3 m_colorSensor{i2cPort};
+  //rev::ColorSensorV3 m_colorSensor{i2cPort};
   rev::ColorMatch m_colorMatcher;
  
   static constexpr frc::Color kBlueTarget = frc::Color(0.143, 0.427, 0.429);
@@ -117,12 +117,12 @@ class Robot : public frc::TimedRobot {
   frc::SpeedControllerGroup m_left{frontLeftMotor1, frontLeftMotor2, rearLeftMotor1, rearLeftMotor2};
   frc::SpeedControllerGroup m_right{frontRightMotor1, frontRightMotor2, rearRightMotor1, rearRightMotor2};
   
-  double kMaxVel = 2000, kMinVel = 0, kMaxAcc = 1500, kAllErr = 0;
+  double kMaxVel = 2000, kMinVel = 0, kMaxAcc = 2500, kAllErr = 0;
   double 
-  kPe = 0.05, 
+  kPe = 0.06, 
   kI = 0, 
-  kD = .001, 
-  kIz = 0.004, 
+  kD = 0, 
+  kIz = 0, 
   kFF = 0.000156, 
   kMaxOutput = 1, 
   kMinOutput = -1;

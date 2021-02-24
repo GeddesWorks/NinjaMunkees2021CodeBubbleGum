@@ -2,12 +2,18 @@
 #include "Robot.h"
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
-
+frc::Preferences *prefs;
 void Robot::RobotInit() {
+
+  prefs = frc::Preferences::GetInstance();
+  rotationsLeftMotors[1] = prefs->GetInt("ArmUpPosition", 1);
+  frc::SmartDashboard::PutNumber("dfghjkl", rotationsLeftMotors[1]);
+
+
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  frc::Color detectedColor = m_colorSensor.GetColor();m_colorMatcher.AddColorMatch(kBlueTarget);
+  //frc::Color detectedColor = m_colorSensor.GetColor();m_colorMatcher.AddColorMatch(kBlueTarget);
 
   m_colorMatcher.AddColorMatch(kGreenTarget);
   m_colorMatcher.AddColorMatch(kRedTarget);
@@ -87,11 +93,14 @@ void Robot::AutonomousInit() {
   } else {
     // Default Auto goes here
 
-      kPe = frc::SmartDashboard::GetNumber("DB/Slider 0", 0);
+      //rotationsLeftMotors = frc::SmartDashboard::GetNumberArray("DB/Slider 0", 0);
       kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
       kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
       kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
       
+      
+      
+
       frontLeftPID1.SetP(kPe);
       frontLeftPID1.SetI(kI);
       frontLeftPID1.SetD(kD);
@@ -202,10 +211,12 @@ void Robot::AutonomousPeriodic() {
   } else {
     // Default Auto goes here
     
-      rotationsLeftMotors[0] = 80;
-      rotationsRightMotors[0] = -80;
-      if(rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount] <= rotationsLeftMotors[autoCount] && rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount] <= rotationsRightMotors[autoCount])
-      {
+      //rotationsLeftMotors[0] = 10;
+      //rotationsRightMotors[0] = -10;
+      autoCount = 0;
+      //if(rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount] <= rotationsLeftMotors[autoCount] && rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount] <= rotationsRightMotors[autoCount])
+      //{
+        //frc::SmartDashboard::PutNumber("NumberSetTo", rotationsRightMotors[autoCount]);
         frontLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
         frontRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
         rearLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
@@ -214,7 +225,14 @@ void Robot::AutonomousPeriodic() {
         frontRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
         rearLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
         rearRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
-      }
+      //}
+      
+      //else
+      //{
+        //autoCount++;
+                 
+      //}   
+      
       
       
       /*
@@ -349,7 +367,7 @@ void Robot::TeleopPeriodic() {
 
 }
 
-  void Robot::ColorPizza() {
+  /*void Robot::ColorPizza() {
     double confidence = 0.0;
     frc::Color detectedColor = m_colorSensor.GetColor();
     std::string colorString;
@@ -509,8 +527,8 @@ void Robot::TeleopPeriodic() {
     }
     else{
       frc::SmartDashboard::PutBoolean("rotations", false);
-    }*/
-  }
+    }
+  }*/
 
   void Robot::Intake() {
     bool up = upSwitch.Get();
