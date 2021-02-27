@@ -57,7 +57,18 @@ class Robot : public frc::TimedRobot {
   std::vector<double> rotationsLeftMotors;
   std::vector<double> rotationsRightMotors;
   bool runOnce = false;
-  int autoCount;
+  int autoCount = 0;
+
+  std::string val11;
+  std::string val12;
+
+  std::string val21;
+  std::string val22;
+
+  int beforeCount1;
+  int afterCount1;
+  int beforeCount2;
+  int afterCount2;
   // Input
 
   frc::Joystick JLeft{0};

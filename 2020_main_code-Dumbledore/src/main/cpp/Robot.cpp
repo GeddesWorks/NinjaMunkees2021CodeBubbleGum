@@ -1,13 +1,13 @@
 
 #include "Robot.h"
 #include <iostream>
-#include <frc/smartdashboard/SmartDashboard.h>
-frc::Preferences *prefs;
+//#include <frc/smartdashboard/SmartDashboard.h>
+//frc::Preferences *prefs;
 void Robot::RobotInit() {
 
-  prefs = frc::Preferences::GetInstance();
-  rotationsLeftMotors[1] = prefs->GetInt("ArmUpPosition", 1);
-  frc::SmartDashboard::PutNumber("dfghjkl", rotationsLeftMotors[1]);
+  //prefs = frc::Preferences::GetInstance();
+  //rotationsLeftMotors[1] = prefs->GetInt("ArmUpPosition", 1);
+  
 
 
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -94,10 +94,12 @@ void Robot::AutonomousInit() {
     // Default Auto goes here
 
       //rotationsLeftMotors = frc::SmartDashboard::GetNumberArray("DB/Slider 0", 0);
-      kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
-      kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
-      kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
+      //kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
+      //kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
+      //kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
       
+
+
       
       
 
@@ -199,7 +201,32 @@ void Robot::AutonomousInit() {
       rearRightEncoder1.SetPosition(0);
       rearRightEncoder2.SetPosition(0);
 
-      autoCount = 1;
+      
+
+      //val11 = frc::SmartDashboard::GetString("DB/String 0", " ");
+      //beforeCount1 = 0;
+      /*while(afterCount1 = val11.find(",", beforeCount1) != std::string::npos)
+      {
+        
+        val12 = val11.substr(beforeCount1, afterCount1);
+        beforeCount1 = afterCount1 + 1;
+        rotationsLeftMotors.push_back(atof(val12.c_str()));
+        
+      }
+
+      val21 = frc::SmartDashboard::GetString("DB/String 1", " ");
+      beforeCount2 = 0;
+      
+      while(afterCount2 = val21.find(",", beforeCount2) != std::string::npos)
+      {
+
+        val22 = val21.substr(beforeCount2, afterCount2);
+        beforeCount2 = afterCount2 + 1;
+        rotationsRightMotors.push_back(atof(val22.c_str()) * -1);
+        
+      }*/
+
+
   }
 }
 
@@ -211,12 +238,18 @@ void Robot::AutonomousPeriodic() {
   } else {
     // Default Auto goes here
     
-      //rotationsLeftMotors[0] = 10;
-      //rotationsRightMotors[0] = -10;
-      autoCount = 0;
+      //autoCount = 0;
+      
+
+    
+       
+
+      rotationsLeftMotors[0] = 10;
+      rotationsRightMotors[0] = -10;
+      
       //if(rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount] <= rotationsLeftMotors[autoCount] && rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount] <= rotationsRightMotors[autoCount])
       //{
-        //frc::SmartDashboard::PutNumber("NumberSetTo", rotationsRightMotors[autoCount]);
+        
         frontLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
         frontRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
         rearLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
@@ -227,11 +260,11 @@ void Robot::AutonomousPeriodic() {
         rearRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
       //}
       
-      //else
-      //{
-        //autoCount++;
+      /*else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsLeftMotors.size() - 1)
+      {
+        autoCount++;
                  
-      //}   
+      } */  
       
       
       
