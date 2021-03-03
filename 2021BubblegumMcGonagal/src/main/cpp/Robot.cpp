@@ -15,9 +15,9 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   //frc::Color detectedColor = m_colorSensor.GetColor();m_colorMatcher.AddColorMatch(kBlueTarget);
 
-  m_colorMatcher.AddColorMatch(kGreenTarget);
-  m_colorMatcher.AddColorMatch(kRedTarget);
-  m_colorMatcher.AddColorMatch(kYellowTarget);
+  //m_colorMatcher.AddColorMatch(kGreenTarget);
+  //m_colorMatcher.AddColorMatch(kRedTarget);
+  //m_colorMatcher.AddColorMatch(kYellowTarget);
 
   // ECODERS
   shoot1->ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, kTimeoutMs);
@@ -202,29 +202,41 @@ void Robot::AutonomousInit() {
       rearRightEncoder2.SetPosition(0);
 
       
+      //afterCount1 = val11.find(",", beforeCount1) != std::string::npos
+      float addVal1 = 0;
+      float lastVal1 = 0;
 
-      //val11 = frc::SmartDashboard::GetString("DB/String 0", " ");
-      //beforeCount1 = 0;
-      /*while(afterCount1 = val11.find(",", beforeCount1) != std::string::npos)
-      {
-        
+      val11 = frc::SmartDashboard::GetString("DB/String 0", " ");
+      beforeCount1 = 0;
+      for(int i = 0; i < 100; i++)
+      {      
+        afterCount1 = val11.find(",", beforeCount1);
         val12 = val11.substr(beforeCount1, afterCount1);
         beforeCount1 = afterCount1 + 1;
-        rotationsLeftMotors.push_back(atof(val12.c_str()));
-        
+        addVal1 = (atof(val12.c_str()));
+        rotationsLeftMotors.push_back(addVal1 + lastVal1); 
+        lastVal1 = addVal1;
+        if(afterCount1 == std::string::npos){
+          break;
+        }
       }
 
       val21 = frc::SmartDashboard::GetString("DB/String 1", " ");
       beforeCount2 = 0;
-      
-      while(afterCount2 = val21.find(",", beforeCount2) != std::string::npos)
-      {
-
+      float addVal2 = 0;
+      float lastVal2 = 0;
+      for(int i = 0; i < 100; i++)
+      {       
+        afterCount2 = val21.find(",", beforeCount2);
         val22 = val21.substr(beforeCount2, afterCount2);
         beforeCount2 = afterCount2 + 1;
-        rotationsRightMotors.push_back(atof(val22.c_str()) * -1);
-        
-      }*/
+        addVal2 = (atof(val22.c_str()) * -1); 
+        rotationsRightMotors.push_back(addVal2 + lastVal2);
+        lastVal2 = addVal2;
+        if(afterCount2 == std::string::npos){
+          break;
+        }
+      }
 
 
   }
@@ -241,15 +253,17 @@ void Robot::AutonomousPeriodic() {
       //autoCount = 0;
       
 
-    
-       
+      frc::SmartDashboard::PutNumber("length of rotations", rotationsLeftMotors.size());
+      frc::SmartDashboard::PutString("val11", val11);
+      frc::SmartDashboard::PutString("val12", val12);
+      frc::SmartDashboard::PutString("val22", val22);
+      frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors[0]);
 
-      rotationsLeftMotors[0] = 10;
-      rotationsRightMotors[0] = -10;
+      //rotationsLeftMotors.push_back(10);
+      //rotationsRightMotors.push_back(-10);
       
-      //if(rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount] <= rotationsLeftMotors[autoCount] && rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount] <= rotationsRightMotors[autoCount])
-      //{
-        
+      if(fabs(rearLeftEncoder1.GetPosition() - rotationsLeftMotors[autoCount]) >= encoderDead || fabs(rearRightEncoder1.GetPosition() - rotationsRightMotors[autoCount]) >= encoderDead)
+      {        
         frontLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
         frontRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
         rearLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
@@ -258,13 +272,12 @@ void Robot::AutonomousPeriodic() {
         frontRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
         rearLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
         rearRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
-      //}
+      }
       
-      /*else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsLeftMotors.size() - 1)
+      else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsRightMotors.size() - 1)
       {
-        autoCount++;
-                 
-      } */  
+        autoCount++;                 
+      } 
       
       
       
@@ -307,6 +320,7 @@ void Robot::AutonomousPeriodic() {
     
     frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors[autoCount]);
     frc::SmartDashboard::PutNumber("RightSetVal", rotationsRightMotors[autoCount]);
+    
   }
 }
 

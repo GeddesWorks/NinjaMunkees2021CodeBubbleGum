@@ -15,8 +15,8 @@
 #include <frc/Joystick.h>
 
 #include <frc/util/color.h>
-#include "rev/ColorSensorV3.h"
-#include "rev/ColorMatch.h"
+//#include "rev/ColorSensorV3.h"
+//#include "rev/ColorMatch.h"
 
 #include <frc/SpeedControllerGroup.h>
 
@@ -81,7 +81,7 @@ class Robot : public frc::TimedRobot {
   
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
   //rev::ColorSensorV3 m_colorSensor{i2cPort};
-  rev::ColorMatch m_colorMatcher;
+  //rev::ColorMatch m_colorMatcher;
  
   static constexpr frc::Color kBlueTarget = frc::Color(0.143, 0.427, 0.429);
   static constexpr frc::Color kGreenTarget = frc::Color(0.197, 0.561, 0.240);
@@ -96,6 +96,7 @@ class Robot : public frc::TimedRobot {
 // drive train setup
 
   float deadZone = .25;
+  float encoderDead = .25;
  
   rev::CANSparkMax frontLeftMotor1{1, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax frontLeftMotor2{2, rev::CANSparkMax::MotorType::kBrushless};
