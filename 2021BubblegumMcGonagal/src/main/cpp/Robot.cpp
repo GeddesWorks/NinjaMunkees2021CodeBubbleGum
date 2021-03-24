@@ -5,6 +5,7 @@
 //frc::Preferences *prefs;
 void Robot::RobotInit() {
 
+std::cout << "Robot Init called" << std::endl;
   //prefs = frc::Preferences::GetInstance();
   //rotationsLeftMotors[1] = prefs->GetInt("ArmUpPosition", 1);
   
@@ -68,6 +69,14 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetPosition());
   frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetPosition());
   frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetPosition());
+
+  frc::SmartDashboard::PutBoolean("ballIn", ballSwitch.Get());
+  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("climber", climbEnc.GetPosition());
+  frc::SmartDashboard::PutNumber("climberSetPos", pos);
   
 }
 
@@ -401,13 +410,7 @@ void Robot::TeleopPeriodic() {
   LED();
   //Testing();
 
-  frc::SmartDashboard::PutBoolean("ballIn", ballSwitch.Get());
-  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("climber", climbEnc.GetPosition());
-
+  
 
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
   double targetArea = table->GetNumber("ta",0.0);
@@ -715,11 +718,11 @@ void Robot::TeleopPeriodic() {
     frc::SmartDashboard::PutNumber("Shooter Actual Speed", shooterActualSpeed);
     //frc::SmartDashboard::PutNumber("Shooter Actual Speed2", shooterActualSpeed);
 
-    //speed = frc::SmartDashboard::GetNumber("DB/Slider 0", 0);
+    speed = frc::SmartDashboard::GetNumber("DB/Slider 0", 30000);
     shooterTargetSpeed = speed; //distanceFromTarget; // * some number;
 
     if(buttonBoard.GetRawButton(11)){
-      shoot2->Config_kP(kPIDLoopIdx, 0., kTimeoutMs);
+      shoot2->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
       shoot1->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
       shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
       shoot2->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
@@ -752,14 +755,18 @@ void Robot::TeleopPeriodic() {
     bool goUp = buttonBoard.GetRawButton(2);
     bool goDown = buttonBoard.GetRawButton(6);
 
+    
     if(goUp == 1){
-      pos = posUp;
+      climber.Set(.5);  //pos += 10; //posUp;
     }
     else if(goDown == 1){
      
-      pos = posDown;
+      climber.Set(-.5); //pos -= 1; //posDown;
     }
-    else{}
+    else
+    {
+      climber.Set(0);
+    }
 
     if(buttonBoard.GetRawButton(3)){
       barDrive->Set(ControlMode::PercentOutput, -1);
@@ -773,7 +780,8 @@ void Robot::TeleopPeriodic() {
 
     //climbPID.SetReference(pos, rev::ControlType::kPosition);
     
-    climber.Set(testJ.GetY());
+    //climber.Set(testJ.GetY());
+
   }
 
   void Robot::Index(){
