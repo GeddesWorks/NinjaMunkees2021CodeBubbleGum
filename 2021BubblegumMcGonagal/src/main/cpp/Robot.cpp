@@ -71,10 +71,10 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetPosition());
 
   frc::SmartDashboard::PutBoolean("ballIn", ballSwitch.Get());
-  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetVelocity());
-  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetVelocity());
+  frc::SmartDashboard::PutNumber("frontRightEncoder", frontRightEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("frontLeftEncoder", frontLeftEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("rearRightEncoder", rearRightEncoder1.GetPosition());
+  frc::SmartDashboard::PutNumber("rearLeftEncoder", rearLeftEncoder1.GetPosition());
   frc::SmartDashboard::PutNumber("climber", climbEnc.GetPosition());
   frc::SmartDashboard::PutNumber("climberSetPos", pos);
   
@@ -102,10 +102,10 @@ void Robot::AutonomousInit() {
   } else {
     // Default Auto goes here
 
-      //rotationsLeftMotors = frc::SmartDashboard::GetNumberArray("DB/Slider 0", 0);
-      //kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
-      //kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
-      //kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
+      kPe = frc::SmartDashboard::GetNumber("DB/Slider 0", 0.03);
+      kI = frc::SmartDashboard::GetNumber("DB/Slider 1", 0);
+      kD = frc::SmartDashboard::GetNumber("DB/Slider 2", 0);
+      kIz = frc::SmartDashboard::GetNumber("DB/Slider 3", 0);
       
 
 
@@ -210,6 +210,9 @@ void Robot::AutonomousInit() {
       rearRightEncoder1.SetPosition(0);
       rearRightEncoder2.SetPosition(0);
 
+      rotationsLeftMotors.clear();
+      rotationsRightMotors.clear();
+      autoCount = 0;
       
       //afterCount1 = val11.find(",", beforeCount1) != std::string::npos
       float addVal1 = 0;
@@ -223,8 +226,8 @@ void Robot::AutonomousInit() {
         val12 = val11.substr(beforeCount1, afterCount1);
         beforeCount1 = afterCount1 + 1;
         addVal1 = (atof(val12.c_str()));
-        rotationsLeftMotors.push_back(addVal1 + lastVal1); 
-        lastVal1 = addVal1;
+        rotationsLeftMotors.push_back(addVal1); 
+        //lastVal1 = (addVal1 + lastVal1);
         if(afterCount1 == std::string::npos){
           break;
         }
@@ -240,14 +243,20 @@ void Robot::AutonomousInit() {
         val22 = val21.substr(beforeCount2, afterCount2);
         beforeCount2 = afterCount2 + 1;
         addVal2 = (atof(val22.c_str()) * -1); 
-        rotationsRightMotors.push_back(addVal2 + lastVal2);
-        lastVal2 = addVal2;
+        rotationsRightMotors.push_back(addVal2);
+        //lastVal2 = (addVal2 + lastVal2);
         if(afterCount2 == std::string::npos){
           break;
         }
       }
+      double currentRight;
+      double currentLeft;
 
+      newSetRight = rotationsRightMotors[0];
+      newSetLeft = rotationsLeftMotors[0];
 
+      autoTimer.Start();
+      timeUp = false;
   }
 }
 
@@ -266,26 +275,164 @@ void Robot::AutonomousPeriodic() {
       frc::SmartDashboard::PutString("val11", val11);
       frc::SmartDashboard::PutString("val12", val12);
       frc::SmartDashboard::PutString("val22", val22);
-      frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors[0]);
+      frc::SmartDashboard::PutNumber("LeftSetVal", newSetLeft);
+      frc::SmartDashboard::PutNumber("RightSetVal", newSetRight);
+      frc::SmartDashboard::PutNumber("autoCount", autoCount);
+      frc::SmartDashboard::PutNumber("deadzone", encoderDead);
 
       //rotationsLeftMotors.push_back(10);
       //rotationsRightMotors.push_back(-10);
       
-      if(fabs(rearLeftEncoder1.GetPosition() - rotationsLeftMotors[autoCount]) >= encoderDead || fabs(rearRightEncoder1.GetPosition() - rotationsRightMotors[autoCount]) >= encoderDead)
+      if(autoCount == 0){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 1){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 2){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 3){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 4){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 5){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 6){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 7){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 8){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 9){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 10){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 11){
+        encoderDead = encoderDeadTurn;
+      }
+      else if(autoCount == 12){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 13){
+        encoderDead = encoderDeadTurn; //encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 14){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 15){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 16){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 17){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 18){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 19){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 20){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 21){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 22){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 23){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 24){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 25){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 26){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 27){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 28){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 29){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 30){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 31){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 32){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 33){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 34){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 35){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 36){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 37){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 38){
+        encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 39){
+        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
+      }
+      else if(autoCount == 40){
+        encoderDead = encoderDeadStraight;
+      }
+      else{
+        encoderDead = encoderDeadStraight;
+      }
+
+      if((fabs(rearLeftEncoder1.GetPosition() - newSetLeft) >= encoderDead 
+      || fabs(rearRightEncoder1.GetPosition() - newSetRight) >= encoderDead) && timeUp == false)
       {        
-        frontLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
-        frontRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
-        rearLeftPID1.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
-        rearRightPID1.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
-        frontLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
-        frontRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
-        rearLeftPID2.SetReference(rotationsLeftMotors[autoCount], rev::ControlType::kPosition);
-        rearRightPID2.SetReference(rotationsRightMotors[autoCount], rev::ControlType::kPosition);
+        frontLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
+        frontRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
+        rearLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
+        rearRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
+        frontLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
+        frontRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
+        rearLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
+        rearRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
+        if(autoTimer.Get() > 6){
+          timeUp = true;
+        }
       }
       
       else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsRightMotors.size() - 1)
       {
-        autoCount++;                 
+        autoCount++;            
+        newSetLeft = rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount];
+        newSetRight = rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount]; 
+        autoTimer.Reset();
+        timeUp = false;
       } 
       
       
@@ -327,8 +474,7 @@ void Robot::AutonomousPeriodic() {
 
     
     
-    frc::SmartDashboard::PutNumber("LeftSetVal", rotationsLeftMotors[autoCount]);
-    frc::SmartDashboard::PutNumber("RightSetVal", rotationsRightMotors[autoCount]);
+   
     
   }
 }

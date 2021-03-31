@@ -29,6 +29,9 @@
 #include <frc/timer.h>
 #include <frc2/timer.h>
 
+#include <adi/ADIS16448_IMU.h>
+
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -58,6 +61,8 @@ class Robot : public frc::TimedRobot {
   std::vector<double> rotationsRightMotors;
   bool runOnce = false;
   int autoCount = 0;
+  double newSetRight;
+  double newSetLeft;
 
   std::string val11;
   std::string val12;
@@ -69,6 +74,17 @@ class Robot : public frc::TimedRobot {
   int afterCount1;
   int beforeCount2;
   int afterCount2;
+
+  bool isTurn;
+  double degreeOfTurn = 90;
+  double angleLast;
+
+  bool targetHit;
+  bool timeUp;
+
+  frc::ADIS16448_IMU imu{};
+
+
   // Input
 
   frc::Joystick JLeft{0};
@@ -90,13 +106,16 @@ class Robot : public frc::TimedRobot {
   bool haveHitColor = false;
   frc::Timer T1;
   frc::Timer T2;
+  frc::Timer autoTimer;
   int rotations = 0;
   bool rot;
   bool isYellow = false;
 // drive train setup
 
-  float deadZone = .25;
-  float encoderDead = .25;
+  float deadZone = .15;
+  float encoderDead = 1;
+  float encoderDeadTurn = 4;
+  float encoderDeadStraight = 1.5;
  
   rev::CANSparkMax frontLeftMotor1{1, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax frontLeftMotor2{2, rev::CANSparkMax::MotorType::kBrushless};
