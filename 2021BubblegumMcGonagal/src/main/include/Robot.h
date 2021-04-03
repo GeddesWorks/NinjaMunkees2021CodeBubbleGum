@@ -59,10 +59,14 @@ class Robot : public frc::TimedRobot {
   void AutoNav2();
   std::vector<double> rotationsLeftMotors;
   std::vector<double> rotationsRightMotors;
+  //Barrel Run Auto Nums
+  //std::vector<double> rotationsLeftMotors = {85,20,50,20,50,20,50,19,95,-18,40,-18,55,-17.5,85,-15,73,-18,47,-16,160,0};
+  //std::vector<double> rotationsRightMotors = {85,-20,50,-20,50,-20,50,-19,95,18,40,18,55,17.5,85,15,73,18,47,16,160,0};
   bool runOnce = false;
   int autoCount = 0;
   double newSetRight;
   double newSetLeft;
+  bool takeDashIn;
 
   std::string val11;
   std::string val12;
@@ -78,6 +82,10 @@ class Robot : public frc::TimedRobot {
   bool isTurn;
   double degreeOfTurn = 90;
   double angleLast;
+  bool quitLoop = false;
+
+  double straightVal;
+  bool straightStarted;
 
   bool targetHit;
   bool timeUp;
@@ -150,7 +158,7 @@ class Robot : public frc::TimedRobot {
   
   double kMaxVel = 2000, kMinVel = 0, kMaxAcc = 2500, kAllErr = 0;
   double 
-  kPe = 0.06, 
+  kPe = 0.018, 
   kI = 0, 
   kD = 0, 
   kIz = 0, 

@@ -411,7 +411,7 @@ void Robot::AutonomousPeriodic() {
       }
 
       if((fabs(rearLeftEncoder1.GetPosition() - newSetLeft) >= encoderDead 
-      || fabs(rearRightEncoder1.GetPosition() - newSetRight) >= encoderDead) && timeUp == false)
+      || fabs(rearRightEncoder1.GetPosition() - newSetRight) >= encoderDead) && timeUp == false && quitLoop == false)
       {        
         frontLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
         frontRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
@@ -421,8 +421,12 @@ void Robot::AutonomousPeriodic() {
         frontRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
         rearLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
         rearRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
-        if(autoTimer.Get() > 6){
+        if(autoTimer.Get() > 5){
           timeUp = true;
+        }
+        if(rotationsRightMotors == 0)
+        {
+          quitLoop = true;
         }
       }
       
@@ -804,7 +808,7 @@ void Robot::TeleopPeriodic() {
     
 
     //Aiming-
-    std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
+    /*std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
     float tx = table->GetNumber("tx",0.0);
     //double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
     double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
@@ -836,6 +840,7 @@ void Robot::TeleopPeriodic() {
     distanceFromTarget = 500; // (hightOfTarget - hightOfCamera) / tan(angleOfCamera + angleOfCameraFromTarget);
 
     frc::SmartDashboard::PutNumber("Distance From Target", distanceFromTarget); 
+    */
 
     if(JLeft.GetRawButton(1) == 1){
       Ld = Ld;
@@ -850,9 +855,26 @@ void Robot::TeleopPeriodic() {
       Rd = Rd * .5;
     }
 
+    if(JRight.GetRawButton(3) == 1 || JLeft.GetRawButton(3) == 1){
+      if(straightStarted == false){
+        straightVal = Rd;
+        straightStarted = true;
+      }
+      else{
+        m_left.Set(straightVal * -1);
+        m_right.Set(straightVal);
+      }
+      
 
-    m_left.Set(Ld * -1);
-    m_right.Set(Rd);
+    }
+    else{
+      m_left.Set(Ld * -1);
+      m_right.Set(Rd);
+    }
+
+
+    
+
   }
 
   void Robot::Shooter(){
