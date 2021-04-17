@@ -205,6 +205,10 @@ class Robot : public frc::TimedRobot {
 
   const int kSlotIdx = 0;
 
+  bool isMiddle = false;
+  bool isFrontBack = true;
+  bool isBackMiddle = false;
+
 // Intake-------------------
   VictorSPX * intakeMove = new VictorSPX(10);
   TalonSRX * intakeRun = new TalonSRX(13);
