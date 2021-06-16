@@ -41,6 +41,7 @@ std::cout << "Robot Init called" << std::endl;
   shoot2->SetSensorPhase(false);
   shoot2->SetInverted(false);
 
+  
   climbPID.SetP(CkPe);
   climbPID.SetI(CkI);
   climbPID.SetD(CkD);
@@ -49,11 +50,13 @@ std::cout << "Robot Init called" << std::endl;
   climbPID.SetOutputRange(kMinOutput, kMaxOutput);
   
 
-  index->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
 
   T1.Start();
   T2.Start();
 
+
+
+  frc::CameraServer::GetInstance()->StartAutomaticCapture();
 }
 
 /**
@@ -111,7 +114,7 @@ void Robot::AutonomousInit() {
 
       
       
-
+      /*
       frontLeftPID1.SetP(kPe);
       frontLeftPID1.SetI(kI);
       frontLeftPID1.SetD(kD);
@@ -210,6 +213,8 @@ void Robot::AutonomousInit() {
       rearRightEncoder1.SetPosition(0);
       rearRightEncoder2.SetPosition(0);
 
+      */
+
       rotationsLeftMotors.clear();
       rotationsRightMotors.clear();
       autoCount = 0;
@@ -252,11 +257,14 @@ void Robot::AutonomousInit() {
       double currentRight;
       double currentLeft;
 
-      newSetRight = rotationsRightMotors[0];
-      newSetLeft = rotationsLeftMotors[0];
+      newSetRight = rotationsRightMotors[2];
+      newSetLeft = rotationsLeftMotors[2];
 
       autoTimer.Start();
       timeUp = false;
+
+      T1.Reset();
+      shooterTargetSpeed = 11000;
   }
 }
 
@@ -265,12 +273,13 @@ void Robot::AutonomousPeriodic() {
     // Custom Auto goes here
 
 
-  } else {
+  } 
+  else {
     // Default Auto goes here
     
       //autoCount = 0;
+      //T2.Reset();
       
-
       frc::SmartDashboard::PutNumber("length of rotations", rotationsLeftMotors.size());
       frc::SmartDashboard::PutString("val11", val11);
       frc::SmartDashboard::PutString("val12", val12);
@@ -279,274 +288,90 @@ void Robot::AutonomousPeriodic() {
       frc::SmartDashboard::PutNumber("RightSetVal", newSetRight);
       frc::SmartDashboard::PutNumber("autoCount", autoCount);
       frc::SmartDashboard::PutNumber("deadzone", encoderDead);
-
+      frc::SmartDashboard::PutNumber("T1", T1.Get());
       //rotationsLeftMotors.push_back(10);
       //rotationsRightMotors.push_back(-10);
-      
-      if(autoCount == 0){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 1){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 2){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 3){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 4){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 5){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 6){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 7){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 8){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 9){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 10){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 11){
-        encoderDead = encoderDeadTurn;
-      }
-      else if(autoCount == 12){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 13){
-        encoderDead = encoderDeadTurn; //encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 14){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 15){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 16){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 17){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 18){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 19){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 20){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 21){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 22){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 23){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 24){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 25){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 26){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 27){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 28){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 29){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 30){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 31){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 32){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 33){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 34){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 35){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 36){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 37){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 38){
-        encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 39){
-        encoderDead = encoderDeadTurn;//encoderDead = encoderDeadStraight;
-      }
-      else if(autoCount == 40){
-        encoderDead = encoderDeadStraight;
-      }
-      else{
-        encoderDead = encoderDeadStraight;
-      }
 
-      if((fabs(rearLeftEncoder1.GetPosition() - newSetLeft) >= encoderDead 
-      || fabs(rearRightEncoder1.GetPosition() - newSetRight) >= encoderDead) && timeUp == false && quitLoop == false)
-      {        
-        frontLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
-        frontRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
-        rearLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
-        rearRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
-        frontLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
-        frontRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
-        rearLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
-        rearRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
-        if(autoTimer.Get() > 5){
-          timeUp = true;
+      
+        /*if(autoCount %2 == 0){
+          encoderDead = encoderDeadStraight;
         }
-        if(rotationsRightMotors[autoCount] == 0)
-        {
-          quitLoop = true;
+        else{
+          encoderDead = encoderDeadTurn;
+        }*/
+      
+        if(autoCount == 0){
+          intakeRun->Set(ControlMode::PercentOutput, 1);
+          //kPe = .03;
+          if(T1.Get() >= 1){
+            autoCount++;
+          }
         }
-      }
-      
-      else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsRightMotors.size() - 1)
-      {
-        autoCount++;            
-        newSetLeft = rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount];
-        newSetRight = rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount]; 
-        autoTimer.Reset();
-        timeUp = false;
-      } 
-      
-      
-      
-      /*
-      if(rearLeftEncoder1.GetPosition() == 80 && rearRightEncoder1.GetPosition() == -80)
-      {
-        rotationsLeftMotors = -80;
-        rotationsRightMotors = 80;
-        frontLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        frontRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        rearLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        rearRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        frontLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        frontRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        rearLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        rearRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-      }
+        else{
+          intakeRun->Set(ControlMode::PercentOutput, 0);
+        }
+        
+        if(autoCount == 1){        
+          shoot2->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
+          shoot1->Config_kP(kPIDLoopIdx, 0.22, kTimeoutMs);
+          shoot1->Set(ControlMode::Velocity, shooterTargetSpeed); 
+          shoot2->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+          ballUp->Set(ControlMode::PercentOutput, 1); 
+          index->Set(ControlMode::PercentOutput, -.3f);
+          if(T1.Get() >= timeToShoot){
+            autoCount++;
+          }
+        }
+        else{
+          shoot2->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
+          shoot1->Config_kP(kPIDLoopIdx, 0.01, kTimeoutMs);
+          shoot1->Set(ControlMode::Velocity, 0); 
+          shoot2->Set(ControlMode::Velocity, 0); 
+          ballUp->Set(ControlMode::PercentOutput, 0);
+          index->Set(ControlMode::PercentOutput, 0);
+        }
+        
+        if(autoCount >= 2){
+          /*if(((fabs(rearLeftEncoder1.GetPosition() - newSetLeft) >= encoderDead 
+          || fabs(rearRightEncoder1.GetPosition() - newSetRight) >= encoderDead) || autoCount == 2) && timeUp == false && quitLoop == false)
+          {        
+            frontLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
+            frontRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
+            rearLeftPID1.SetReference(newSetLeft, rev::ControlType::kPosition);
+            rearRightPID1.SetReference(newSetRight, rev::ControlType::kPosition);
+            frontLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
+            frontRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
+            rearLeftPID2.SetReference(newSetLeft, rev::ControlType::kPosition);
+            rearRightPID2.SetReference(newSetRight, rev::ControlType::kPosition);
+            if(autoTimer.Get() > 5){
+              timeUp = true;
+            }
+            if(rotationsRightMotors[autoCount] == 0)
+            {
+              quitLoop = true;
+            }
+          }
+          
+          else if(autoCount < rotationsLeftMotors.size() - 1 && autoCount < rotationsRightMotors.size() - 1)
+          {
+            autoCount++;            
+            newSetLeft = rearLeftEncoder1.GetPosition() + rotationsLeftMotors[autoCount];
+            newSetRight = rearRightEncoder1.GetPosition() + rotationsRightMotors[autoCount]; 
+            autoTimer.Reset();
+            timeUp = false;
+          } */
 
-      else if (rearLeftEncoder1.GetPosition() == 0 && rearRightEncoder1.GetPosition() == 0)
-      {
-        rotationsLeftMotors = 80;
-        rotationsRightMotors = 80;
-        frontLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        frontRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        rearLeftPID1.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        rearRightPID1.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        frontLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        frontRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-        rearLeftPID2.SetReference(rotationsLeftMotors, rev::ControlType::kPosition);
-        rearRightPID2.SetReference(rotationsRightMotors, rev::ControlType::kPosition);
-      }
-      */
-    
-    
-    
-    
-    
-
-    
-    
-   
+          m_left.Set(-.05 * -1);
+          m_right.Set(-.05);
+        }
+            
+      
     
   }
 }
 
-void Robot::AutoNav1()
-{
-
-  //drive stright towards first target
-  //rotationsLeftMotors = 80;
-  //rotationsRightMotors = -80;
-  /*if(frontLeftEncoder1.GetPosition() >= 80 && frontRightEncoder1.GetPosition() <= -80){
-    frc::Wait(1);
-    rotationsLeftMotors -= 80;
-    rotationsRightMotors += 80;
-    //frc::Wait(1);
-  }*/
-  
-  
-  // after pass target start to turn right and loop
-  /*rotationsLeftMotors += 60;
-  rotationsRightMotors += 10;
-  frc::Wait(.5);
-
-  // drive towards second target
-  rotationsLeftMotors += 20;
-  rotationsRightMotors += 20;
-  frc::Wait(.5);
-
-  // drive left around target
-  rotationsLeftMotors += 10;
-  rotationsRightMotors += 60;
-  frc::Wait(.5);
-
-  //drive towards last target
-  rotationsLeftMotors += 20;
-  rotationsRightMotors += 20;
-  frc::Wait(.5);
-
-  // drive left around target but not fully
-  rotationsLeftMotors += 10;
-  rotationsRightMotors += 30;
-  frc::Wait(.5);
-  */
-
-  // drive tpowards end 
-  //rotationsLeftMotors += 70;
-  //rotationsRightMotors -= 70;
-  frc::Wait(.5);
-  
-  // done
-
-  // drive motors
-   runOnce = true;
-}
-
-void Robot::AutoNav2(){
-  //drive forwards and to the left
-  /*frontLeftEncoder1.SetPosition(rotationsLeftMotors);
-  frontRightEncoder1.SetPosition(rotationsRightMotors);
-  rearLeftEncoder1.SetPosition(rotationsLeftMotors); 
-  rearRightEncoder1.SetPosition(rotationsRightMotors); 
-  frontLeftEncoder2.SetPosition(rotationsLeftMotors); 
-  frontRightEncoder2.SetPosition(rotationsRightMotors); 
-  rearLeftEncoder2.SetPosition(rotationsLeftMotors);  
-  rearRightEncoder2.SetPosition(rotationsRightMotors); */
-}
 void Robot::TeleopInit() {
- 
+ climbEnc.SetPosition(0);
 }
 
 void Robot::TeleopPeriodic() {
@@ -559,6 +384,8 @@ void Robot::TeleopPeriodic() {
   Index();
   LED();
   //Testing();
+
+  print hello;
 
   
 
@@ -731,6 +558,7 @@ void Robot::TeleopPeriodic() {
   }*/
 
   void Robot::Intake() {
+    /*
     bool up = upSwitch.Get();
     bool down = downSwitch.Get();
     if(up == true){
@@ -756,24 +584,39 @@ void Robot::TeleopPeriodic() {
     else{
       intakeMove->Set(ControlMode::PercentOutput, 0);
     }
-    
-    if(buttonBoard.GetRawButton(9)){  //Has intake button been pushed?
+    */
+    if(buttonBoard.GetRawButtonReleased(9)){  //Has intake button been pushed?
       if(buttonPressed == false){
         buttonPressed = true;
         if(isRun == false){
-          intakeRun->Set(ControlMode::PercentOutput, -.8);
           isRun = true;
         }
         else{
           isRun = false;
-          intakeRun->Set(ControlMode::PercentOutput, 0);
         }
+      }
+      else{
+        buttonPressed = false;
       } 
-      
-    } 
-    else{
-      buttonPressed = false;
     }
+
+    if(buttonBoard.GetRawButton(10) == false){ //over ride if going backward
+
+      
+      if(buttonPressed){
+        intakeRun->Set(ControlMode::PercentOutput, -.8);
+      }
+      else{
+        intakeRun->Set(ControlMode::PercentOutput, 0);
+      }
+      
+      
+    }
+    else if(buttonBoard.GetRawButton(10)){
+      intakeRun->Set(ControlMode::PercentOutput, 1);
+    }
+    
+    
   }
 
   void Robot::Drive() {
@@ -883,7 +726,7 @@ void Robot::TeleopPeriodic() {
     //    Code for accuracy challenge   //
     //////////////////////////////////////
 
-    
+
     /*frc::SmartDashboard::PutBoolean("isFrontBack", isFrontBack);
     frc::SmartDashboard::PutBoolean("isMiddle", isMiddle);
 
@@ -921,6 +764,23 @@ void Robot::TeleopPeriodic() {
     */
 
     //shooterTargetSpeed = speed; //distanceFromTarget; // * some number;
+
+    float shooterSlowSpeed = 7000;
+    float shooterHighSpeed = 14000;
+    float varShooterSpeed = JLeft.GetZ() * -1;
+    float shooterNewMin = 6000;
+    float shooterOldRange = (1 - 0);  // old max - old min
+    float shooterNewRange = (shooterHighSpeed - shooterNewMin); // new max - new min
+
+    if(buttonBoard.GetRawButton(1)){  // low speed
+      shooterTargetSpeed = shooterSlowSpeed;
+    }
+    else if(buttonBoard.GetRawButton(5)){
+      shooterTargetSpeed = shooterHighSpeed;
+    }
+    else if(buttonBoard.GetRawButton(8)){     
+      shooterTargetSpeed = (((varShooterSpeed - 0) * shooterNewRange) / shooterOldRange) + shooterNewMin;
+    }
 
     shooterActualSpeed = shoot1->GetSelectedSensorVelocity();
     shooterActualSpeed2 = shoot2->GetSelectedSensorVelocity();
@@ -965,13 +825,15 @@ void Robot::TeleopPeriodic() {
       climber.Set(.5);  //pos += 10; //posUp;
     }
     else if(goDown == 1){
-     
+    
       climber.Set(-.5); //pos -= 1; //posDown;
     }
     else
     {
       climber.Set(0);
     }
+    
+   
 
     if(buttonBoard.GetRawButton(3)){
       barDrive->Set(ControlMode::PercentOutput, -1);
@@ -990,37 +852,31 @@ void Robot::TeleopPeriodic() {
   }
 
   void Robot::Index(){
-    if (buttonBoard.GetRawButton(11) && shooterIsRunning == true && indexShift == true){
+    
+    if(buttonBoard.GetRawButtonPressed(4)){
       T2.Reset();
       indexShift = true;
-    }
-    else if(buttonBoard.GetRawButton(4) && indexShift == false){
-      T2.Reset();
-      indexShift = true;
-      
-    }
-    else if(indexShift == false && buttonBoard.GetRawButton(11) == false){
-      index->Set(ControlMode::PercentOutput, 0); // 0
-      
     }
     
-
     
     if (indexShift == true) {
       
-      if(indexClick.Get() && T2.Get() > .3 && buttonBoard.GetRawButton(11) == false){
+      if(indexClick.Get() && T2.Get() > .5){
         indexShift = false;
       }
-      else if (buttonBoard.GetRawButton(11) == false){
-        index->Set(ControlMode::PercentOutput, -.5); 
-      }
       else{
-        index->Set(ControlMode::PercentOutput, -.3f); 
+        index->Set(ControlMode::PercentOutput, -.4f); 
       }
+    }  
+    else if (buttonBoard.GetRawButton(11) == true){
+      index->Set(ControlMode::PercentOutput, -.3); 
+    } 
+    else if (JLeft.GetRawButton(7)){
+      index->Set(ControlMode::PercentOutput, .3);  //reverse
     }
-    
-
-    
+    else{
+      index->Set(ControlMode::PercentOutput, 0); // 0
+    }
   }
 
   void Robot::LED(){
@@ -1036,36 +892,7 @@ void Robot::TeleopPeriodic() {
 
   }
 
-  void Robot::Testing(){
-    speed = frc::SmartDashboard::GetNumber("DB/Slider 0", 0);
-    Ospeed = speed / 100;
-    
-
-    if(buttonBoard.GetRawButton(11)){
-        shoot1->Set(ControlMode::PercentOutput, Ospeed);
-        shoot2->Set(ControlMode::PercentOutput, Ospeed * -1);
-        ballUp->Set(ControlMode::PercentOutput, 1);
-        if(shooterActualSpeed < shooterTargetSpeed + shooterdeadzone && shooterActualSpeed > shooterTargetSpeed - shooterdeadzone){
-          shooterIsRunning = true;
-        }
-        else{
-          shooterIsRunning = false;
-        }
-      }
-      else{
-        shoot1->Set(ControlMode::Velocity, 0); 
-        shoot2->Set(ControlMode::Velocity, 0); 
-        shooterIsRunning = false;
-        ballUp->Set(ControlMode::PercentOutput, 0);
-      }
-      frc::SmartDashboard::PutNumber("Shooter Target Speed", shooterTargetSpeed);
-      if(shooterIsRunning == true){
-        frc::SmartDashboard::PutBoolean("Shooter Is Shooting", true);
-      }
-      else{
-        frc::SmartDashboard::PutBoolean("Shooter Is Shooting", false);
-      }
-  }
+  
 
 void Robot::TestPeriodic() {
   

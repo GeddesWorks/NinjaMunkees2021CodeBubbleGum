@@ -68,6 +68,8 @@ class Robot : public frc::TimedRobot {
   double newSetLeft;
   bool takeDashIn;
 
+  bool autoShooting = false;
+  int timeToShoot = 5;
   std::string val11;
   std::string val12;
 
@@ -82,7 +84,7 @@ class Robot : public frc::TimedRobot {
   bool isTurn;
   double degreeOfTurn = 90;
   double angleLast;
-  bool quitLoop = false;
+  bool quitLoop;
 
   double straightVal;
   bool straightStarted;
@@ -225,6 +227,8 @@ class Robot : public frc::TimedRobot {
   double pos;
   double posUp = 0;
   double posDown = 0;
+
+  double climbLimit = 9000000;
 
   double CkPe = 0.2, 
     CkI = 0, 
